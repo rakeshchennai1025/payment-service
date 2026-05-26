@@ -3,6 +3,7 @@ package com.assessment.payment.controller;
 
 import com.assessment.payment.dto.request.PaymentRequest;
 import com.assessment.payment.dto.response.PaymentResponse;
+import com.assessment.payment.model.entity.PaymentTransaction;
 import com.assessment.payment.repo.PaymentRepository;
 import com.assessment.payment.service.PaymentProducer;
 import jakarta.validation.Valid;
@@ -31,6 +32,15 @@ public class PaymentController {
         return "Server is up";
     }
 */
+
+    @GetMapping("/{id}")
+    public ResponseEntity<PaymentTransaction> getPaymentStatus(@PathVariable Integer id) {
+        ResponseEntity<PaymentTransaction> paymentTransactionResponseEntity = repository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return paymentTransactionResponseEntity;
+    }
+    
     @PostMapping
     public ResponseEntity<PaymentResponse> submitPayment(@Valid @RequestBody PaymentRequest request) {
         //String txnId = (request.transaction_id() == null || request.transaction_id().isBlank())
